@@ -51,21 +51,48 @@
     var W = 210, H = 297, M = 18, LARG = W - M * 2;
     var roxo = [35, 10, 67];
 
+    /* Logomarca em vetor (mesma arte do site): selo roxo com chave + nome */
+    function logomarca(x, y, alt) {
+      var s = alt / 100; /* arte original em grade 100x100 */
+      /* selo */
+      doc.setFillColor(roxo[0], roxo[1], roxo[2]);
+      doc.roundedRect(x, y, 100 * s, 100 * s, 10 * s, 10 * s, 'F');
+      doc.setFillColor(255, 255, 255);
+      doc.circle(x + 31 * s, y + 55 * s, 13 * s, 'F');
+      doc.setFillColor(roxo[0], roxo[1], roxo[2]);
+      doc.circle(x + 31 * s, y + 55 * s, 6 * s, 'F');
+      /* haste da chave */
+      doc.setFillColor(255, 255, 255);
+      var seg = [[40, 0], [6, 6], [-6, 6], [-6, 0], [-4, -5], [-4, 5], [-4, -5], [-4, 5],
+                 [-4, 0], [-4, -5], [-4, 5], [-6, 0]].map(function (p) { return [p[0] * s, p[1] * s]; });
+      doc.lines(seg, x + 42 * s, y + 49 * s, [1, 1], 'F', true);
+      /* nome */
+      var tx = x + 100 * s + 3;
+      doc.setTextColor(roxo[0], roxo[1], roxo[2]);
+      doc.setFont('helvetica', 'bold');
+      doc.setFontSize(13);
+      doc.text('APS', tx, y + 5.6);
+      doc.setFontSize(7.6);
+      doc.text('Soluções', tx, y + 9.6);
+      doc.text('Imobiliárias', tx, y + 13.2);
+    }
+
     function cabecalho() {
       doc.setFillColor(roxo[0], roxo[1], roxo[2]);
-      doc.rect(0, 0, W, 24, 'F');
+      doc.rect(0, 0, W, 26, 'F');
+      /* plaquinha branca para a logo aparecer sobre o fundo roxo */
+      doc.setFillColor(255, 255, 255);
+      doc.roundedRect(M - 3, 3.5, 56, 19, 2.5, 2.5, 'F');
+      logomarca(M, 5.7, 14.6);
       doc.setTextColor(255, 255, 255);
       doc.setFont('helvetica', 'bold');
       doc.setFontSize(15);
-      doc.text('APS Soluções Imobiliárias', M, 11.5);
-      doc.setFont('helvetica', 'normal');
-      doc.setFontSize(10);
-      doc.text('Termo de Visita', M, 18);
+      doc.text('Termo de Visita', W - M, 15, { align: 'right' });
       doc.setTextColor(22, 36, 58);
     }
 
     cabecalho();
-    var y = 34;
+    var y = 36;
     var LH = 4.9;
 
     doc.setFont('helvetica', 'normal');
@@ -77,7 +104,7 @@
       var eTitulo = /^(TERMO DE VISITA|IMÓVEIS:|PROPOSTA)/.test(ln);
       var mRot = /^(Cliente|CPF|Endereço|E-mail|Cel|VALOR PRETENDIDO|Corretor\(a\)|Corretor|Imóvel|Valor ofertado|Pagamento|Entrada\/sinal|Entrada|Validade|Condições):\s*/.exec(ln);
       if (ln.trim() === '') { y += LH * 0.6; continue; }
-      if (y > H - 22) { doc.addPage(); cabecalho(); y = 34; doc.setFontSize(10); }
+      if (y > H - 22) { doc.addPage(); cabecalho(); y = 36; doc.setFontSize(10); }
       if (mRot) {
         /* rótulo em negrito + valor normal, com quebra de linha alinhada */
         var rot = mRot[0].replace(/\s+$/, '') + ' ';
@@ -90,7 +117,7 @@
         doc.text(pr[0] || '', M + wRot, y);
         y += LH;
         for (var k = 1; k < pr.length; k++) {
-          if (y > H - 22) { doc.addPage(); cabecalho(); y = 34; doc.setFontSize(10); }
+          if (y > H - 22) { doc.addPage(); cabecalho(); y = 36; doc.setFontSize(10); }
           doc.text(pr[k], M + wRot, y);
           y += LH;
         }
@@ -98,7 +125,7 @@
       }
       var partes = doc.splitTextToSize(ln, LARG);
       for (var j = 0; j < partes.length; j++) {
-        if (y > H - 22) { doc.addPage(); cabecalho(); y = 34; doc.setFontSize(10); }
+        if (y > H - 22) { doc.addPage(); cabecalho(); y = 36; doc.setFontSize(10); }
         doc.setFont('helvetica', eTitulo ? 'bold' : 'normal');
         doc.text(partes[j], M, y);
         y += LH;
@@ -107,7 +134,7 @@
 
     /* Bloco de assinatura eletrônica */
     var altBloco = 72;
-    if (y + altBloco + 6 > H - 18) { doc.addPage(); cabecalho(); y = 34; }
+    if (y + altBloco + 6 > H - 18) { doc.addPage(); cabecalho(); y = 36; }
     y += 6;
 
     doc.setDrawColor(roxo[0], roxo[1], roxo[2]);

@@ -153,7 +153,9 @@ footer{color:var(--muted);font-size:12.5px;text-align:center}
         <pre class="review" id="review"></pre>
         <div class="actions">
           <button type="button" class="btn primary" id="baixar-pdf" hidden>Baixar PDF assinado</button>
-          <a class="btn primary" id="wa" href="#" target="_blank" rel="noopener">Enviar pelo WhatsApp</a>
+          <button type="button" class="btn primary" id="pdf-wa" hidden>Enviar PDF pelo WhatsApp</button>
+          <button type="button" class="btn primary" id="pdf-email" hidden>Enviar PDF por e-mail</button>
+          <a class="btn primary" id="wa" href="#" target="_blank" rel="noopener">Enviar texto pelo WhatsApp</a>
           <button type="button" class="btn ghost" id="copiar">Copiar texto</button>
         </div>
         <p class="note">WhatsApp da APS: <span style="user-select:all">(31) 99935-3400</span>. Se o botão não abrir, copie o texto e envie para esse número.</p>
@@ -285,26 +287,60 @@ $('form').addEventListener('submit',async e=>{
     mostrarTexto(textoComCodigo(t,assinaturaAtual.dados));
     st.textContent=`Este termo já foi registrado na APS. Código ${assinaturaAtual.dados.codigo}.`;return;
   }
-  mostrarTexto(t);$('baixar-pdf').hidden=true;assinaturaAtual=null;
+  mostrarTexto(t);['baixar-pdf','pdf-wa','pdf-email'].forEach(id=>$(id).hidden=true);assinaturaAtual=null;
   st.textContent='Registrando o termo na APS…';$('gerar').disabled=true;
   const ok=await registrar(reg);
   if(!ok){$('gerar').disabled=false;st.textContent='Não foi possível registrar agora (verifique a internet). Envie pelo WhatsApp para garantir que a APS receba.';return;}
   ultimoEnviado=chave;
   const a=await obterAssinatura(reg.id);$('gerar').disabled=false;
   if(!a){st.textContent='Termo registrado na APS, mas não foi possível gerar o PDF agora. Envie uma cópia pelo WhatsApp.';return;}
-  assinaturaAtual={dados:a,nome:reg.cliente,texto:t};
+  assinaturaAtual={dados:a,nome:reg.cliente,texto:t,email:reg.email};
   mostrarTexto(textoComCodigo(t,a));
-  $('baixar-pdf').hidden=false;
-  st.textContent=`Termo registrado e assinado. Código ${a.codigo}. Baixe o PDF e, se quiser, envie também pelo WhatsApp.`;
+  ['baixar-pdf','pdf-wa','pdf-email'].forEach(id=>$(id).hidden=false);
+  st.textContent=`Termo registrado e assinado. Código ${a.codigo}. Baixe o PDF ou envie por WhatsApp ou e-mail.`;
 });
+function montarPdf(){
+  const s=assinaturaAtual;if(!s)return null;
+  const doc=window.APS_PDF.gerar({cliente:s.nome,texto:s.texto,codigo:s.dados.codigo,hash:s.dados.hash_documento,assinadoEm:s.dados.assinado_em,url:VERIFICAR+s.dados.codigo});
+  return {doc,nome:window.APS_PDF.nomeArquivo(s.dados.codigo)};
+}
 $('baixar-pdf').addEventListener('click',()=>{
-  const s=assinaturaAtual;if(!s)return;
   const st=$('status');
-  try{
-    const doc=window.APS_PDF.gerar({cliente:s.nome,texto:s.texto,codigo:s.dados.codigo,hash:s.dados.hash_documento,assinadoEm:s.dados.assinado_em,url:VERIFICAR+s.dados.codigo});
-    doc.save(window.APS_PDF.nomeArquivo(s.dados.codigo));
-  }catch(e){st.textContent='Não foi possível gerar o PDF agora. Recarregue a página e tente de novo, ou envie pelo WhatsApp.';}
+  try{const p=montarPdf();if(p)p.doc.save(p.nome);}
+  catch(e){st.textContent='Não foi possível gerar o PDF agora. Recarregue a página e tente de novo, ou envie pelo WhatsApp.';}
 });
+/* Compartilha o PDF: no celular abre a folha de compartilhamento com o arquivo anexado
+   (WhatsApp, e-mail etc.). Onde o navegador não anexa arquivos, baixa o PDF e abre
+   o WhatsApp ou o e-mail com a mensagem e o link de verificação já preenchidos. */
+async function enviarPdf(canal){
+  const s=assinaturaAtual;if(!s)return;
+  const st=$('status');st.hidden=false;
+  const link=VERIFICAR+s.dados.codigo;
+  const assunto=`Termo de Visita APS - ${s.nome} (${s.dados.codigo})`;
+  const msg=`Termo de Visita - APS Soluções Imobiliárias\nCliente: ${s.nome}\nCódigo de verificação: ${s.dados.codigo}\nConfira em: ${link}`;
+  let p;
+  try{p=montarPdf();}catch(e){st.textContent='Não foi possível gerar o PDF agora. Recarregue a página e tente de novo.';return;}
+  const file=new File([p.doc.output('blob')],p.nome,{type:'application/pdf'});
+  if(navigator.canShare&&navigator.canShare({files:[file]})){
+    try{
+      await navigator.share({files:[file],title:assunto,text:msg});
+      st.textContent='PDF compartilhado.';return;
+    }catch(e){
+      if(e&&e.name==='AbortError'){return;}
+    }
+  }
+  p.doc.save(p.nome);
+  if(canal==='wa'){
+    window.open(`https://wa.me/${WA}?text=${encodeURIComponent(msg)}`,'_blank','noopener');
+    st.textContent='O PDF foi baixado. No WhatsApp que abriu, toque em anexar (clipe) e escolha o arquivo '+p.nome+'.';
+  }else{
+    const para=s.email?encodeURIComponent(s.email):'';
+    location.href=`mailto:${para}?subject=${encodeURIComponent(assunto)}&body=${encodeURIComponent(msg)}`;
+    st.textContent='O PDF foi baixado. No e-mail que abriu, anexe o arquivo '+p.nome+'.';
+  }
+}
+$('pdf-wa').addEventListener('click',()=>enviarPdf('wa'));
+$('pdf-email').addEventListener('click',()=>enviarPdf('email'));
 $('copiar').addEventListener('click',()=>{
   const txt=$('review').textContent;const b=$('copiar');
   const done=()=>{b.textContent='Copiado';setTimeout(()=>b.textContent='Copiar texto',2000);};
