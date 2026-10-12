@@ -1,26 +1,28 @@
 <!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Termo de Visita APS</title><style>[hidden]{display:none!important}img{max-width:100%}body{margin:0}</style>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,500;8..60,650&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,500;8..60,650&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500&family=Poppins:wght@700&display=swap">
 <style>
 :root{
-  --bg:#F3F5F7; --paper:#FFFFFF; --ink:#16243A; --muted:#5B6878; --line:#D9DFE6;
-  --accent:#1E6B57; --accent-ink:#FFFFFF; --accent-soft:#E3F0EB; --warn:#9A3B22; --focus:#2F7FD1;
+  --bg:#F4F3F7; --paper:#FFFFFF; --ink:#16243A; --muted:#5B6878; --line:#DDD8E6;
+  --accent:#230A43; --accent-ink:#FFFFFF; --accent-soft:#ECE6F5; --brand:#230A43; --warn:#9A3B22; --focus:#2F7FD1;
   --display:"Source Serif 4", Georgia, "Times New Roman", serif;
   --body:"IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
   --mono:"IBM Plex Mono", ui-monospace, Menlo, monospace;
 }
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
   --bg:#0F1620; --paper:#17212D; --ink:#E6ECF2; --muted:#9AA7B5; --line:#2A3746;
-  --accent:#4FB394; --accent-ink:#0B1A14; --accent-soft:#1B3029; --warn:#F08D6E; --focus:#6FB0F2; color-scheme:dark}}
+  --accent:#B9A2E8; --accent-ink:#1A0833; --accent-soft:#2A2140; --warn:#F08D6E; --focus:#6FB0F2; color-scheme:dark}}
 :root[data-theme="dark"]{
   --bg:#0F1620; --paper:#17212D; --ink:#E6ECF2; --muted:#9AA7B5; --line:#2A3746;
-  --accent:#4FB394; --accent-ink:#0B1A14; --accent-soft:#1B3029; --warn:#F08D6E; --focus:#6FB0F2; color-scheme:dark}
+  --accent:#B9A2E8; --accent-ink:#1A0833; --accent-soft:#2A2140; --warn:#F08D6E; --focus:#6FB0F2; color-scheme:dark}
 *{box-sizing:border-box}
 body{background:var(--bg);color:var(--ink);font:15px/1.55 var(--body);padding:24px 16px 48px}
 .wrap{max-width:680px;margin:0 auto;display:grid;gap:20px}
-header{display:grid;gap:6px;padding-bottom:8px;border-bottom:2px solid var(--ink)}
-.brand{font:600 12px/1 var(--body);letter-spacing:.14em;text-transform:uppercase;color:var(--accent)}
+header{display:grid;gap:10px;padding-bottom:12px;border-bottom:2px solid var(--ink)}
+.logo{background:#FFFFFF;border-radius:10px;padding:12px 16px;justify-self:start;display:flex}
+.logo svg{display:block;height:64px;width:auto}
+.status{font-size:13.5px;border-radius:8px;padding:9px 12px;background:var(--bg);border:1px solid var(--line)}
 h1{font:650 clamp(26px,6vw,34px)/1.15 var(--display);margin:0;text-wrap:balance}
 .lead{color:var(--muted);margin:0;max-width:60ch}
 section{background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:20px;display:grid;gap:16px}
@@ -64,7 +66,7 @@ footer{color:var(--muted);font-size:12.5px;text-align:center}
 </head><body>
 <div class="wrap">
   <header>
-    <div class="brand">APS Soluções Imobiliárias</div>
+    <div class="logo" aria-label="APS Soluções Imobiliárias"><svg viewBox="0 0 330 110" role="img" aria-hidden="true"><rect x="0" y="5" width="100" height="100" rx="10" fill="#230A43"/><circle cx="31" cy="55" r="13" fill="#FFFFFF"/><circle cx="31" cy="55" r="6" fill="#230A43"/><path d="M42 49h40l6 6-6 6h-6l-4-5-4 5-4-5-4 5h-4l-4-5-4 5h-6z" fill="#FFFFFF"/><text x="114" y="35" font-family="Poppins, Montserrat, Arial, sans-serif" font-weight="700" font-size="30" fill="#230A43">APS</text><text x="114" y="70" font-family="Poppins, Montserrat, Arial, sans-serif" font-weight="700" font-size="30" fill="#230A43">Soluções</text><text x="114" y="105" font-family="Poppins, Montserrat, Arial, sans-serif" font-weight="700" font-size="30" fill="#230A43">Imobiliárias</text></svg></div>
     <h1>Termo de Visita</h1>
     <p class="lead">Preencha seus dados e os imóveis visitados, leia e aceite o termo. Se gostou de algum imóvel, já pode deixar sua proposta no mesmo envio.</p>
   </header>
@@ -142,11 +144,12 @@ footer{color:var(--muted);font-size:12.5px;text-align:center}
     </section>
 
     <section aria-labelledby="h5s">
-      <div class="sec-h"><span class="num">5</span><div><h2 id="h5s">Revisar e enviar</h2><p class="sec-sub">O termo vai para o WhatsApp da APS.</p></div></div>
+      <div class="sec-h"><span class="num">5</span><div><h2 id="h5s">Revisar e enviar</h2><p class="sec-sub">O termo fica registrado na APS e você pode enviar uma cópia pelo WhatsApp.</p></div></div>
       <div class="err" id="form-err" role="alert"></div>
-      <button type="submit" class="btn primary">Gerar termo para envio</button>
+      <button type="submit" class="btn primary" id="gerar">Gerar e registrar termo</button>
       <div id="saida" hidden>
         <div class="ok" id="ok-msg"></div>
+        <div class="status" id="status" hidden></div>
         <pre class="review" id="review"></pre>
         <div class="actions">
           <a class="btn primary" id="wa" href="#" target="_blank" rel="noopener">Enviar pelo WhatsApp</a>
@@ -165,6 +168,14 @@ footer{color:var(--muted);font-size:12.5px;text-align:center}
 (function(){
 const $=id=>document.getElementById(id);
 const WA="5531999353400";
+const SB_URL="https://hkahjsljeefckzzviktt.supabase.co/rest/v1/termos_visita";
+const SB_KEY="sb_publishable_DtnfSE5rIXcmyDybpRItUA_SAh7U_va";
+let ultimoEnviado=null;
+async function registrar(reg){
+  const ctl=new AbortController();const to=setTimeout(()=>ctl.abort(),12000);
+  try{const r=await fetch(SB_URL,{method:'POST',signal:ctl.signal,headers:{'apikey':SB_KEY,'Content-Type':'application/json','Prefer':'return=minimal'},body:JSON.stringify(reg)});return r.ok;}
+  catch(e){return false;}finally{clearTimeout(to);}
+}
 try{const d=new Date();$('data').value=new Date(d.getTime()-d.getTimezoneOffset()*60000).toISOString().slice(0,10);}catch(e){}
 function maskCPF(v){v=v.replace(/\D/g,'').slice(0,11);return v.replace(/(\d{3})(\d)/,'$1.$2').replace(/(\d{3})(\d)/,'$1.$2').replace(/(\d{3})(\d{1,2})$/,'$1-$2');}
 function maskTel(v){v=v.replace(/\D/g,'').slice(0,11);if(v.length<=10)return v.replace(/(\d{2})(\d)/,'($1) $2').replace(/(\d{4})(\d)/,'$1-$2');return v.replace(/(\d{2})(\d)/,'($1) $2').replace(/(\d{5})(\d)/,'$1-$2');}
@@ -194,7 +205,7 @@ const MESES=['janeiro','fevereiro','março','abril','maio','junho','julho','agos
 function porExtenso(s){const[a,m,d]=s.split('-');return `${+d} de ${MESES[+m-1]} de ${a}`;}
 function norm(s){return s.normalize('NFD').replace(/[̀-ͯ]/g,'').trim().toLowerCase().replace(/\s+/g,' ');}
 
-$('form').addEventListener('submit',e=>{
+$('form').addEventListener('submit',async e=>{
   e.preventDefault();const errs=[];const v=id=>$(id).value.trim();
   const ims=imoveis();
   if(!v('nome'))errs.push('informe o nome do cliente');
@@ -233,10 +244,23 @@ $('form').addEventListener('submit',e=>{
     if(v('obs'))t+=`Condições: ${v('obs')}\n`;
     t+=`(Sujeita à aceitação do proprietário; só se torna definitiva com a assinatura do instrumento próprio.)\n`;
   }
+  const reg={cliente:v('nome'),cpf:v('cpf')||null,celular:v('tel'),endereco:v('endereco')||null,email:v('email')||null,
+    tel_residencial:v('telres')||null,tel_comercial:v('telcom')||null,corretor:v('corretor'),data_visita:v('data'),
+    valor_pretendido:v('pretendido'),imoveis:ims,assinatura:v('assinatura'),aceite:true,fez_proposta:querProposta,
+    proposta_imovel:querProposta?(ims.length>1?$('qual').value:ims[0]):null,proposta_valor:querProposta?v('valor'):null,
+    proposta_entrada:querProposta&&v('entrada')?v('entrada'):null,proposta_pagamento:querProposta?pag.join(' + '):null,
+    proposta_validade:querProposta?$('validade').value:null,proposta_obs:querProposta&&v('obs')?v('obs'):null,texto_completo:t};
+  const chave=JSON.stringify({...reg,texto_completo:null});
   $('review').textContent=t;
   $('wa').href=`https://wa.me/${WA}?text=${encodeURIComponent(t)}`;
-  $('ok-msg').textContent=(querProposta?'Termo e proposta prontos.':'Termo pronto.')+' Toque em "Enviar pelo WhatsApp" para mandar à APS.';
+  $('ok-msg').textContent=(querProposta?'Termo e proposta prontos.':'Termo pronto.')+'';
   $('saida').hidden=false;$('saida').scrollIntoView({behavior:'smooth',block:'start'});
+  const st=$('status');st.hidden=false;
+  if(chave===ultimoEnviado){st.textContent='Este termo já foi registrado na APS.';return;}
+  st.textContent='Registrando o termo na APS…';$('gerar').disabled=true;
+  const ok=await registrar(reg);$('gerar').disabled=false;
+  if(ok){ultimoEnviado=chave;st.textContent='Termo registrado na APS. Se quiser, envie também uma cópia pelo WhatsApp.';}
+  else{st.textContent='Não foi possível registrar agora (verifique a internet). Envie pelo WhatsApp para garantir que a APS receba.';}
 });
 $('copiar').addEventListener('click',()=>{
   const txt=$('review').textContent;const b=$('copiar');
