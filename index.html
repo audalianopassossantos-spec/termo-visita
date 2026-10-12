@@ -87,11 +87,11 @@ footer{color:var(--muted);font-size:12.5px;text-align:center}
     </section>
 
     <section aria-labelledby="h2s">
-      <div class="sec-h"><span class="num">2</span><div><h2 id="h2s">Visita</h2><p class="sec-sub">Corretor, imóveis visitados e valor pretendido.</p></div></div>
+      <div class="sec-h"><span class="num">2</span><div><h2 id="h2s">Visita</h2><p class="sec-sub">Corretor, imóveis visitados e valor anunciado do imóvel.</p></div></div>
       <div class="grid">
         <label class="f full"><span class="req">Corretor(a) que apresentou</span><input id="corretor" placeholder="Nome do(s) corretor(es)" required></label>
         <label class="f"><span class="req">Data da visita</span><input id="data" type="date" required></label>
-        <label class="f"><span class="req">Valor pretendido (R$)</span><input id="pretendido" inputmode="numeric" placeholder="R$ 0,00" required></label>
+        <label class="f"><span class="req">Valor anunciado do imóvel (R$)</span><input id="pretendido" inputmode="numeric" placeholder="R$ 0,00" required></label>
         <div class="full" style="display:grid;gap:10px">
           <div class="f"><span class="req">Imóvel(eis) visitado(s)</span></div>
           <div id="imoveis" style="display:grid;gap:8px"></div>
@@ -104,7 +104,7 @@ footer{color:var(--muted);font-size:12.5px;text-align:center}
       <div class="sec-h"><span class="num">3</span><div><h2 id="h3s">Termo de visita</h2><p class="sec-sub">Leia com atenção antes de aceitar.</p></div></div>
       <div class="term" id="termo-texto" tabindex="0">
         <p>Declaro que, nesta data, por intermédio do(s) corretor(a) <strong id="t-corretor">indicado(s) acima</strong>, visitei pela primeira vez e obtive do(s) mesmo(s) as informações necessárias para aquisição do(s) imóvel(eis) relacionado(s) acima, sendo que o(s) mesmo(s) prestou(aram)-me toda a consultoria necessária à verificação de viabilidade de aquisição do(s) citado(s) imóvel(eis).</p>
-        <p>Tendo em vista a assessoria prestada, comprometo-me a não efetivar a aquisição do(s) imóvel(eis) acima através de outro intermediário ou diretamente com o proprietário. Caso opte por realizar o negócio através de outra pessoa não ligada à <strong>APS Soluções Imobiliárias – CNPJ nº 43.728.620/0001-54</strong>, reconheço e me comprometo a pagar pelos serviços por ela prestados a importância equivalente a <strong>6% (seis por cento) do valor pretendido</strong> (<span id="t-valor">informado acima</span>), ressaltando-se que, caso o negócio seja viabilizado pela APS Soluções Imobiliárias, nada será devido pelo cliente.</p>
+        <p>Tendo em vista a assessoria prestada, comprometo-me a não efetivar a aquisição do(s) imóvel(eis) acima através de outro intermediário ou diretamente com o proprietário. Caso opte por realizar o negócio através de outra pessoa não ligada à <strong>APS Soluções Imobiliárias – CNPJ nº 43.728.620/0001-54</strong>, reconheço e me comprometo a pagar pelos serviços por ela prestados a importância equivalente a <strong>6% (seis por cento) do valor anunciado do imóvel</strong> (<span id="t-valor">informado acima</span>), ressaltando-se que, caso o negócio seja viabilizado pela APS Soluções Imobiliárias, nada será devido pelo cliente.</p>
         <p>Autorizo a APS a usar meus dados apenas para registro desta visita e contato sobre o(s) imóvel(eis) (Lei 13.709/2018 – LGPD).</p>
       </div>
       <label class="check"><input type="checkbox" id="aceite"><span>Li e concordo com o termo de visita acima.</span></label>
@@ -242,7 +242,7 @@ $('form').addEventListener('submit',async e=>{
   if(v('tel').replace(/\D/g,'').length<10)errs.push('informe o celular com DDD');
   if(!v('corretor'))errs.push('informe o corretor');
   if(!v('data'))errs.push('informe a data da visita');
-  if(!v('pretendido'))errs.push('informe o valor pretendido');
+  if(!v('pretendido'))errs.push('informe o valor anunciado do imóvel');
   if(!ims.length)errs.push('informe o imóvel visitado');
   if(!$('aceite').checked)errs.push('marque que leu e concorda com o termo');
   if(!v('assinatura'))errs.push('digite seu nome como assinatura');
@@ -262,8 +262,8 @@ $('form').addEventListener('submit',async e=>{
   if(v('endereco'))t+=`Endereço: ${v('endereco')}\n`;
   if(v('email'))t+=`E-mail: ${v('email')}\n`;
   t+=`Cel: ${v('tel')}`;if(v('telres'))t+=` | Resid.: ${v('telres')}`;if(v('telcom'))t+=` | Com.: ${v('telcom')}`;t+=`\n`;
-  t+=`VALOR PRETENDIDO: ${v('pretendido')}\nCorretor(a): ${v('corretor')}\n\nIMÓVEIS:\n`+ims.map((x,i)=>`${i+1}. ${x}`).join('\n')+`\n\n`;
-  t+=`Declaro que nesta data, por intermédio do(s) corretor(a) acima, visitei pela primeira vez e obtive as informações e a consultoria necessárias para aquisição do(s) imóvel(eis) relacionado(s). Comprometo-me a não efetivar a aquisição através de outro intermediário ou diretamente com o proprietário. Caso o negócio seja realizado por pessoa não ligada à APS Soluções Imobiliárias (CNPJ 43.728.620/0001-54), pagarei pelos serviços prestados 6% (seis por cento) do valor pretendido; se o negócio for viabilizado pela APS, nada será devido pelo cliente.\n\n`;
+  t+=`VALOR ANUNCIADO DO IMÓVEL: ${v('pretendido')}\nCorretor(a): ${v('corretor')}\n\nIMÓVEIS:\n`+ims.map((x,i)=>`${i+1}. ${x}`).join('\n')+`\n\n`;
+  t+=`Declaro que nesta data, por intermédio do(s) corretor(a) acima, visitei pela primeira vez e obtive as informações e a consultoria necessárias para aquisição do(s) imóvel(eis) relacionado(s). Comprometo-me a não efetivar a aquisição através de outro intermediário ou diretamente com o proprietário. Caso o negócio seja realizado por pessoa não ligada à APS Soluções Imobiliárias (CNPJ 43.728.620/0001-54), pagarei pelos serviços prestados 6% (seis por cento) do valor anunciado do imóvel; se o negócio for viabilizado pela APS, nada será devido pelo cliente.\n\n`;
   t+=`Belo Horizonte, ${porExtenso(v('data'))}.\nAssinado eletronicamente por: ${v('assinatura')} (em ${agora})\n`;
   if(querProposta){
     t+=`\nPROPOSTA\n`;

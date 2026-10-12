@@ -102,7 +102,7 @@
     for (var i = 0; i < linhas.length; i++) {
       var ln = linhas[i];
       var eTitulo = /^(TERMO DE VISITA|IMÓVEIS:|PROPOSTA)/.test(ln);
-      var mRot = /^(Cliente|CPF|Endereço|E-mail|Cel|VALOR PRETENDIDO|Corretor\(a\)|Corretor|Imóvel|Valor ofertado|Pagamento|Entrada\/sinal|Entrada|Validade|Condições):\s*/.exec(ln);
+      var mRot = /^(Cliente|CPF|Endereço|E-mail|Cel|VALOR ANUNCIADO DO IMÓVEL|Corretor\(a\)|Corretor|Imóvel|Valor ofertado|Pagamento|Entrada\/sinal|Entrada|Validade|Condições):\s*/.exec(ln);
       if (ln.trim() === '') { y += LH * 0.6; continue; }
       if (y > H - 22) { doc.addPage(); cabecalho(); y = 36; doc.setFontSize(10); }
       if (mRot) {
