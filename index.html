@@ -152,6 +152,7 @@ footer{color:var(--muted);font-size:12.5px;text-align:center}
         <div class="status" id="status" hidden></div>
         <pre class="review" id="review"></pre>
         <div class="actions">
+          <button type="button" class="btn primary" id="baixar-pdf" hidden>Baixar PDF assinado</button>
           <a class="btn primary" id="wa" href="#" target="_blank" rel="noopener">Enviar pelo WhatsApp</a>
           <button type="button" class="btn ghost" id="copiar">Copiar texto</button>
         </div>
@@ -164,17 +165,43 @@ footer{color:var(--muted);font-size:12.5px;text-align:center}
   <footer>APS Soluções Imobiliárias · Rua Kepler, 608, Loja 1 · Santa Lúcia · Belo Horizonte/MG</footer>
 </div>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js" defer></script>
+<script src="/pdf.js" defer></script>
 <script>
 (function(){
 const $=id=>document.getElementById(id);
 const WA="5531999353400";
 const SB_URL="https://hkahjsljeefckzzviktt.supabase.co/rest/v1/termos_visita";
+const SB_RPC="https://hkahjsljeefckzzviktt.supabase.co/rest/v1/rpc/obter_assinatura_termo";
 const SB_KEY="sb_publishable_DtnfSE5rIXcmyDybpRItUA_SAh7U_va";
-let ultimoEnviado=null;
+const VERIFICAR="https://termo-visita.vercel.app/verificar/";
+let ultimoEnviado=null,assinaturaAtual=null;
+function uuid(){
+  if(window.crypto&&crypto.randomUUID)return crypto.randomUUID();
+  const b=new Uint8Array(16);crypto.getRandomValues(b);b[6]=(b[6]&15)|64;b[8]=(b[8]&63)|128;
+  const h=[...b].map(x=>x.toString(16).padStart(2,'0')).join('');
+  return `${h.slice(0,8)}-${h.slice(8,12)}-${h.slice(12,16)}-${h.slice(16,20)}-${h.slice(20)}`;
+}
 async function registrar(reg){
   const ctl=new AbortController();const to=setTimeout(()=>ctl.abort(),12000);
   try{const r=await fetch(SB_URL,{method:'POST',signal:ctl.signal,headers:{'apikey':SB_KEY,'Content-Type':'application/json','Prefer':'return=minimal'},body:JSON.stringify(reg)});return r.ok;}
   catch(e){return false;}finally{clearTimeout(to);}
+}
+async function obterAssinatura(id){
+  const ctl=new AbortController();const to=setTimeout(()=>ctl.abort(),12000);
+  try{
+    const r=await fetch(SB_RPC,{method:'POST',signal:ctl.signal,headers:{'apikey':SB_KEY,'Content-Type':'application/json'},body:JSON.stringify({p_id:id})});
+    if(!r.ok)return null;const a=await r.json();
+    return Array.isArray(a)&&a[0]&&a[0].codigo?a[0]:null;
+  }catch(e){return null;}finally{clearTimeout(to);}
+}
+function mostrarTexto(t){
+  $('review').textContent=t;
+  $('wa').href=`https://wa.me/${WA}?text=${encodeURIComponent(t)}`;
+}
+function textoComCodigo(t,a){
+  return t+`\nCódigo de verificação: ${a.codigo}\nConfira em: ${VERIFICAR}${a.codigo}\n`;
 }
 try{const d=new Date();$('data').value=new Date(d.getTime()-d.getTimezoneOffset()*60000).toISOString().slice(0,10);}catch(e){}
 function maskCPF(v){v=v.replace(/\D/g,'').slice(0,11);return v.replace(/(\d{3})(\d)/,'$1.$2').replace(/(\d{3})(\d)/,'$1.$2').replace(/(\d{3})(\d{1,2})$/,'$1-$2');}
@@ -244,23 +271,39 @@ $('form').addEventListener('submit',async e=>{
     if(v('obs'))t+=`Condições: ${v('obs')}\n`;
     t+=`(Sujeita à aceitação do proprietário; só se torna definitiva com a assinatura do instrumento próprio.)\n`;
   }
-  const reg={cliente:v('nome'),cpf:v('cpf')||null,celular:v('tel'),endereco:v('endereco')||null,email:v('email')||null,
+  const reg={id:uuid(),cliente:v('nome'),cpf:v('cpf')||null,celular:v('tel'),endereco:v('endereco')||null,email:v('email')||null,
     tel_residencial:v('telres')||null,tel_comercial:v('telcom')||null,corretor:v('corretor'),data_visita:v('data'),
     valor_pretendido:v('pretendido'),imoveis:ims,assinatura:v('assinatura'),aceite:true,fez_proposta:querProposta,
     proposta_imovel:querProposta?(ims.length>1?$('qual').value:ims[0]):null,proposta_valor:querProposta?v('valor'):null,
     proposta_entrada:querProposta&&v('entrada')?v('entrada'):null,proposta_pagamento:querProposta?pag.join(' + '):null,
     proposta_validade:querProposta?$('validade').value:null,proposta_obs:querProposta&&v('obs')?v('obs'):null,texto_completo:t};
-  const chave=JSON.stringify({...reg,texto_completo:null});
-  $('review').textContent=t;
-  $('wa').href=`https://wa.me/${WA}?text=${encodeURIComponent(t)}`;
+  const chave=JSON.stringify({...reg,id:null,texto_completo:null});
   $('ok-msg').textContent=(querProposta?'Termo e proposta prontos.':'Termo pronto.')+'';
   $('saida').hidden=false;$('saida').scrollIntoView({behavior:'smooth',block:'start'});
   const st=$('status');st.hidden=false;
-  if(chave===ultimoEnviado){st.textContent='Este termo já foi registrado na APS.';return;}
+  if(chave===ultimoEnviado&&assinaturaAtual){
+    mostrarTexto(textoComCodigo(t,assinaturaAtual.dados));
+    st.textContent=`Este termo já foi registrado na APS. Código ${assinaturaAtual.dados.codigo}.`;return;
+  }
+  mostrarTexto(t);$('baixar-pdf').hidden=true;assinaturaAtual=null;
   st.textContent='Registrando o termo na APS…';$('gerar').disabled=true;
-  const ok=await registrar(reg);$('gerar').disabled=false;
-  if(ok){ultimoEnviado=chave;st.textContent='Termo registrado na APS. Se quiser, envie também uma cópia pelo WhatsApp.';}
-  else{st.textContent='Não foi possível registrar agora (verifique a internet). Envie pelo WhatsApp para garantir que a APS receba.';}
+  const ok=await registrar(reg);
+  if(!ok){$('gerar').disabled=false;st.textContent='Não foi possível registrar agora (verifique a internet). Envie pelo WhatsApp para garantir que a APS receba.';return;}
+  ultimoEnviado=chave;
+  const a=await obterAssinatura(reg.id);$('gerar').disabled=false;
+  if(!a){st.textContent='Termo registrado na APS, mas não foi possível gerar o PDF agora. Envie uma cópia pelo WhatsApp.';return;}
+  assinaturaAtual={dados:a,nome:reg.cliente,texto:t};
+  mostrarTexto(textoComCodigo(t,a));
+  $('baixar-pdf').hidden=false;
+  st.textContent=`Termo registrado e assinado. Código ${a.codigo}. Baixe o PDF e, se quiser, envie também pelo WhatsApp.`;
+});
+$('baixar-pdf').addEventListener('click',()=>{
+  const s=assinaturaAtual;if(!s)return;
+  const st=$('status');
+  try{
+    const doc=window.APS_PDF.gerar({cliente:s.nome,texto:s.texto,codigo:s.dados.codigo,hash:s.dados.hash_documento,assinadoEm:s.dados.assinado_em,url:VERIFICAR+s.dados.codigo});
+    doc.save(window.APS_PDF.nomeArquivo(s.dados.codigo));
+  }catch(e){st.textContent='Não foi possível gerar o PDF agora. Recarregue a página e tente de novo, ou envie pelo WhatsApp.';}
 });
 $('copiar').addEventListener('click',()=>{
   const txt=$('review').textContent;const b=$('copiar');
