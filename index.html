@@ -1,0 +1,249 @@
+<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Termo de Visita APS</title><style>[hidden]{display:none!important}img{max-width:100%}body{margin:0}</style>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,500;8..60,650&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap">
+<style>
+:root{
+  --bg:#F3F5F7; --paper:#FFFFFF; --ink:#16243A; --muted:#5B6878; --line:#D9DFE6;
+  --accent:#1E6B57; --accent-ink:#FFFFFF; --accent-soft:#E3F0EB; --warn:#9A3B22; --focus:#2F7FD1;
+  --display:"Source Serif 4", Georgia, "Times New Roman", serif;
+  --body:"IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono:"IBM Plex Mono", ui-monospace, Menlo, monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0F1620; --paper:#17212D; --ink:#E6ECF2; --muted:#9AA7B5; --line:#2A3746;
+  --accent:#4FB394; --accent-ink:#0B1A14; --accent-soft:#1B3029; --warn:#F08D6E; --focus:#6FB0F2; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0F1620; --paper:#17212D; --ink:#E6ECF2; --muted:#9AA7B5; --line:#2A3746;
+  --accent:#4FB394; --accent-ink:#0B1A14; --accent-soft:#1B3029; --warn:#F08D6E; --focus:#6FB0F2; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font:15px/1.55 var(--body);padding:24px 16px 48px}
+.wrap{max-width:680px;margin:0 auto;display:grid;gap:20px}
+header{display:grid;gap:6px;padding-bottom:8px;border-bottom:2px solid var(--ink)}
+.brand{font:600 12px/1 var(--body);letter-spacing:.14em;text-transform:uppercase;color:var(--accent)}
+h1{font:650 clamp(26px,6vw,34px)/1.15 var(--display);margin:0;text-wrap:balance}
+.lead{color:var(--muted);margin:0;max-width:60ch}
+section{background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:20px;display:grid;gap:16px}
+.sec-h{display:flex;gap:12px;align-items:baseline}
+.num{font:500 13px/1 var(--mono);color:var(--accent);border:1px solid var(--accent);border-radius:999px;padding:5px 8px;flex:none}
+h2{font:650 20px/1.2 var(--display);margin:0}
+.sec-sub{color:var(--muted);font-size:13.5px;margin:2px 0 0}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.full{grid-column:1/-1}
+@media (max-width:520px){.grid{grid-template-columns:minmax(0,1fr)}}
+label.f{display:grid;gap:5px;font-size:13px;font-weight:500;color:var(--muted)}
+input,select,textarea{font:15px/1.4 var(--body);color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:7px;padding:10px 11px;width:100%}
+textarea{min-height:76px;resize:vertical}
+input:focus,select:focus,textarea:focus,button:focus-visible,.chip input:focus-visible+span{outline:2px solid var(--focus);outline-offset:1px}
+.req::after{content:" *";color:var(--warn)}
+.err{color:var(--warn);font-size:12.5px;min-height:0}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{position:relative}
+.chip input{position:absolute;opacity:0;inset:0;cursor:pointer}
+.chip span{display:inline-block;padding:7px 13px;border:1px solid var(--line);border-radius:999px;font-size:14px;background:var(--bg);cursor:pointer}
+.chip input:checked+span{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.term{background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:14px 16px;max-height:300px;overflow:auto;font-size:14px}
+.term p{margin:0 0 10px}
+.check{display:flex;gap:10px;align-items:flex-start;font-size:14.5px}
+.check input{width:20px;height:20px;flex:none;margin-top:2px;accent-color:var(--accent)}
+.toggle{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap}
+.switch{display:flex;gap:0;border:1px solid var(--line);border-radius:8px;overflow:hidden}
+.switch button{border:0;background:var(--bg);color:var(--ink);padding:9px 16px;font:500 14px var(--body);cursor:pointer}
+.switch button[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink)}
+.btn{font:600 15px var(--body);border-radius:8px;padding:13px 18px;border:1px solid var(--accent);cursor:pointer;text-align:center;text-decoration:none;display:inline-block}
+.btn.primary{background:var(--accent);color:var(--accent-ink)}
+.btn.ghost{background:transparent;color:var(--accent)}
+.actions{display:flex;gap:10px;flex-wrap:wrap}
+.actions>*{flex:1 1 200px}
+.review{white-space:pre-wrap;font:13.5px/1.6 var(--mono);background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:14px;overflow-x:auto;max-height:420px;overflow-y:auto}
+.ok{background:var(--accent-soft);color:var(--ink);border-radius:8px;padding:10px 12px;font-size:14px}
+.sr{font-size:12px}
+.note{color:var(--muted);font-size:12.5px}
+footer{color:var(--muted);font-size:12.5px;text-align:center}
+</style>
+</head><body>
+<div class="wrap">
+  <header>
+    <div class="brand">APS Soluções Imobiliárias</div>
+    <h1>Termo de Visita</h1>
+    <p class="lead">Preencha seus dados e os imóveis visitados, leia e aceite o termo. Se gostou de algum imóvel, já pode deixar sua proposta no mesmo envio.</p>
+  </header>
+
+  <form id="form" novalidate>
+    <div class="wrap" style="padding:0">
+    <section aria-labelledby="h1s">
+      <div class="sec-h"><span class="num">1</span><div><h2 id="h1s">Dados do cliente</h2><p class="sec-sub">Quem está visitando o imóvel.</p></div></div>
+      <div class="grid">
+        <label class="f full"><span class="req">Cliente (nome completo)</span><input id="nome" autocomplete="name" required></label>
+        <label class="f"><span>CPF</span><input id="cpf" inputmode="numeric" placeholder="000.000.000-00" maxlength="14"><span class="err" id="cpf-err"></span></label>
+        <label class="f"><span class="req">Celular</span><input id="tel" inputmode="tel" autocomplete="tel" placeholder="(31) 90000-0000" maxlength="15" required></label>
+        <label class="f full"><span>Endereço</span><input id="endereco" autocomplete="street-address"></label>
+        <label class="f full"><span>E-mail</span><input id="email" type="email" autocomplete="email"></label>
+        <label class="f"><span>Tel. residencial</span><input id="telres" inputmode="tel" maxlength="15"></label>
+        <label class="f"><span>Tel. comercial</span><input id="telcom" inputmode="tel" maxlength="15"></label>
+      </div>
+    </section>
+
+    <section aria-labelledby="h2s">
+      <div class="sec-h"><span class="num">2</span><div><h2 id="h2s">Visita</h2><p class="sec-sub">Corretor, imóveis visitados e valor pretendido.</p></div></div>
+      <div class="grid">
+        <label class="f full"><span class="req">Corretor(a) que apresentou</span><input id="corretor" placeholder="Nome do(s) corretor(es)" required></label>
+        <label class="f"><span class="req">Data da visita</span><input id="data" type="date" required></label>
+        <label class="f"><span class="req">Valor pretendido (R$)</span><input id="pretendido" inputmode="numeric" placeholder="R$ 0,00" required></label>
+        <div class="full" style="display:grid;gap:10px">
+          <div class="f"><span class="req">Imóvel(eis) visitado(s)</span></div>
+          <div id="imoveis" style="display:grid;gap:8px"></div>
+          <button type="button" class="btn ghost" id="add-imovel" style="justify-self:start;padding:9px 14px">+ Adicionar outro imóvel</button>
+        </div>
+      </div>
+    </section>
+
+    <section aria-labelledby="h3s">
+      <div class="sec-h"><span class="num">3</span><div><h2 id="h3s">Termo de visita</h2><p class="sec-sub">Leia com atenção antes de aceitar.</p></div></div>
+      <div class="term" id="termo-texto" tabindex="0">
+        <p>Declaro que, nesta data, por intermédio do(s) corretor(a) <strong id="t-corretor">indicado(s) acima</strong>, visitei pela primeira vez e obtive do(s) mesmo(s) as informações necessárias para aquisição do(s) imóvel(eis) relacionado(s) acima, sendo que o(s) mesmo(s) prestou(aram)-me toda a consultoria necessária à verificação de viabilidade de aquisição do(s) citado(s) imóvel(eis).</p>
+        <p>Tendo em vista a assessoria prestada, comprometo-me a não efetivar a aquisição do(s) imóvel(eis) acima através de outro intermediário ou diretamente com o proprietário. Caso opte por realizar o negócio através de outra pessoa não ligada à <strong>APS Soluções Imobiliárias – CNPJ nº 43.728.620/0001-54</strong>, reconheço e me comprometo a pagar pelos serviços por ela prestados a importância equivalente a <strong>6% (seis por cento) do valor pretendido</strong> (<span id="t-valor">informado acima</span>), ressaltando-se que, caso o negócio seja viabilizado pela APS Soluções Imobiliárias, nada será devido pelo cliente.</p>
+        <p>Autorizo a APS a usar meus dados apenas para registro desta visita e contato sobre o(s) imóvel(eis) (Lei 13.709/2018 – LGPD).</p>
+      </div>
+      <label class="check"><input type="checkbox" id="aceite"><span>Li e concordo com o termo de visita acima.</span></label>
+      <label class="f"><span class="req">Assinatura: digite seu nome completo</span><input id="assinatura" autocomplete="off"></label>
+    </section>
+
+    <section aria-labelledby="h4s">
+      <div class="sec-h"><span class="num">4</span><div><h2 id="h4s">Proposta</h2><p class="sec-sub">Opcional. Gostou do imóvel? Deixe sua oferta.</p></div></div>
+      <div class="toggle">
+        <span>Quer fazer uma proposta agora?</span>
+        <div class="switch" role="group" aria-label="Fazer proposta">
+          <button type="button" id="prop-nao" aria-pressed="true">Agora não</button>
+          <button type="button" id="prop-sim" aria-pressed="false">Sim, quero</button>
+        </div>
+      </div>
+      <div id="proposta" hidden>
+        <div class="grid">
+          <label class="f full" id="wrap-qual" hidden><span class="req">Imóvel da proposta</span><select id="qual"></select></label>
+          <label class="f"><span class="req">Valor ofertado (R$)</span><input id="valor" inputmode="numeric" placeholder="R$ 0,00"></label>
+          <label class="f"><span>Entrada / sinal (R$)</span><input id="entrada" inputmode="numeric" placeholder="R$ 0,00"></label>
+          <div class="full">
+            <div class="f" style="margin-bottom:6px"><span class="req">Forma de pagamento</span></div>
+            <div class="chips">
+              <label class="chip"><input type="checkbox" name="pag" value="À vista"><span>À vista</span></label>
+              <label class="chip"><input type="checkbox" name="pag" value="Financiamento bancário"><span>Financiamento</span></label>
+              <label class="chip"><input type="checkbox" name="pag" value="FGTS"><span>FGTS</span></label>
+              <label class="chip"><input type="checkbox" name="pag" value="Carta de consórcio"><span>Consórcio</span></label>
+              <label class="chip"><input type="checkbox" name="pag" value="Permuta"><span>Permuta</span></label>
+              <label class="chip"><input type="checkbox" name="pag" value="Parcelado direto com o proprietário"><span>Parcelado direto</span></label>
+            </div>
+          </div>
+          <label class="f"><span>Validade da proposta</span>
+            <select id="validade"><option>5 dias</option><option selected>7 dias</option><option>10 dias</option><option>15 dias</option></select></label>
+          <label class="f full"><span>Condições e observações</span><textarea id="obs" placeholder="Ex.: sujeita à aprovação do financiamento; deseja manter os armários; prazo para desocupação…"></textarea></label>
+        </div>
+      </div>
+    </section>
+
+    <section aria-labelledby="h5s">
+      <div class="sec-h"><span class="num">5</span><div><h2 id="h5s">Revisar e enviar</h2><p class="sec-sub">O termo vai para o WhatsApp da APS.</p></div></div>
+      <div class="err" id="form-err" role="alert"></div>
+      <button type="submit" class="btn primary">Gerar termo para envio</button>
+      <div id="saida" hidden>
+        <div class="ok" id="ok-msg"></div>
+        <pre class="review" id="review"></pre>
+        <div class="actions">
+          <a class="btn primary" id="wa" href="#" target="_blank" rel="noopener">Enviar pelo WhatsApp</a>
+          <button type="button" class="btn ghost" id="copiar">Copiar texto</button>
+        </div>
+        <p class="note">WhatsApp da APS: <span style="user-select:all">(31) 99935-3400</span>. Se o botão não abrir, copie o texto e envie para esse número.</p>
+      </div>
+    </section>
+    </div>
+  </form>
+
+  <footer>APS Soluções Imobiliárias · Rua Kepler, 608, Loja 1 · Santa Lúcia · Belo Horizonte/MG</footer>
+</div>
+
+<script>
+(function(){
+const $=id=>document.getElementById(id);
+const WA="5531999353400";
+try{const d=new Date();$('data').value=new Date(d.getTime()-d.getTimezoneOffset()*60000).toISOString().slice(0,10);}catch(e){}
+function maskCPF(v){v=v.replace(/\D/g,'').slice(0,11);return v.replace(/(\d{3})(\d)/,'$1.$2').replace(/(\d{3})(\d)/,'$1.$2').replace(/(\d{3})(\d{1,2})$/,'$1-$2');}
+function maskTel(v){v=v.replace(/\D/g,'').slice(0,11);if(v.length<=10)return v.replace(/(\d{2})(\d)/,'($1) $2').replace(/(\d{4})(\d)/,'$1-$2');return v.replace(/(\d{2})(\d)/,'($1) $2').replace(/(\d{5})(\d)/,'$1-$2');}
+function maskBRL(v){const n=v.replace(/\D/g,'');if(!n)return'';return 'R$ '+(parseInt(n,10)/100).toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2});}
+function cpfOK(c){c=c.replace(/\D/g,'');if(c.length!==11||/^(\d)\1+$/.test(c))return false;for(let t=9;t<11;t++){let s=0;for(let i=0;i<t;i++)s+=+c[i]*(t+1-i);let d=(s*10)%11%10;if(d!==+c[t])return false;}return true;}
+$('cpf').addEventListener('input',e=>{e.target.value=maskCPF(e.target.value);$('cpf-err').textContent='';});
+$('cpf').addEventListener('blur',e=>{if(e.target.value&&!cpfOK(e.target.value))$('cpf-err').textContent='CPF inválido. Confira os números.';});
+['tel','telres','telcom'].forEach(id=>$(id).addEventListener('input',e=>e.target.value=maskTel(e.target.value)));
+['valor','entrada','pretendido'].forEach(id=>$(id).addEventListener('input',e=>e.target.value=maskBRL(e.target.value)));
+$('corretor').addEventListener('input',e=>$('t-corretor').textContent=e.target.value.trim()||'indicado(s) acima');
+$('pretendido').addEventListener('input',e=>$('t-valor').textContent=e.target.value||'informado acima');
+
+let n=0;
+function addImovel(){if(n>=5)return;n++;const w=document.createElement('label');w.className='f';
+  w.innerHTML=`<span class="sr">Imóvel ${n}</span><input id="imovel-${n}" class="imovel" placeholder="Endereço ou código do imóvel ${n}">`;
+  $('imoveis').appendChild(w);w.querySelector('input').addEventListener('input',syncQual);
+  if(n>=5)$('add-imovel').hidden=true;syncQual();}
+function imoveis(){return [...document.querySelectorAll('.imovel')].map(i=>i.value.trim()).filter(Boolean);}
+function syncQual(){const l=imoveis();const sel=$('qual');const cur=sel.value;sel.innerHTML='';l.forEach(x=>{const o=document.createElement('option');o.textContent=x;sel.appendChild(o);});if(l.includes(cur))sel.value=cur;$('wrap-qual').hidden=l.length<2;}
+$('add-imovel').onclick=addImovel;addImovel();
+
+let querProposta=false;
+function setProp(v){querProposta=v;$('prop-sim').setAttribute('aria-pressed',v);$('prop-nao').setAttribute('aria-pressed',!v);$('proposta').hidden=!v;}
+$('prop-sim').onclick=()=>setProp(true);$('prop-nao').onclick=()=>setProp(false);
+
+const MESES=['janeiro','fevereiro','março','abril','maio','junho','julho','agosto','setembro','outubro','novembro','dezembro'];
+function porExtenso(s){const[a,m,d]=s.split('-');return `${+d} de ${MESES[+m-1]} de ${a}`;}
+function norm(s){return s.normalize('NFD').replace(/[̀-ͯ]/g,'').trim().toLowerCase().replace(/\s+/g,' ');}
+
+$('form').addEventListener('submit',e=>{
+  e.preventDefault();const errs=[];const v=id=>$(id).value.trim();
+  const ims=imoveis();
+  if(!v('nome'))errs.push('informe o nome do cliente');
+  if(v('cpf')&&!cpfOK(v('cpf')))errs.push('confira o CPF');
+  if(v('tel').replace(/\D/g,'').length<10)errs.push('informe o celular com DDD');
+  if(!v('corretor'))errs.push('informe o corretor');
+  if(!v('data'))errs.push('informe a data da visita');
+  if(!v('pretendido'))errs.push('informe o valor pretendido');
+  if(!ims.length)errs.push('informe o imóvel visitado');
+  if(!$('aceite').checked)errs.push('marque que leu e concorda com o termo');
+  if(!v('assinatura'))errs.push('digite seu nome como assinatura');
+  else if(v('nome')&&norm(v('assinatura'))!==norm(v('nome')))errs.push('a assinatura deve ser igual ao nome do cliente');
+  let pag=[];
+  if(querProposta){
+    if(!v('valor'))errs.push('informe o valor da proposta');
+    pag=[...document.querySelectorAll('input[name=pag]:checked')].map(x=>x.value);
+    if(!pag.length)errs.push('escolha a forma de pagamento');
+  }
+  if(errs.length){$('form-err').textContent='Falta pouco: '+errs.join('; ')+'.';$('saida').hidden=true;return;}
+  $('form-err').textContent='';
+  const agora=new Date().toLocaleString('pt-BR',{dateStyle:'short',timeStyle:'short'});
+  let t=`TERMO DE VISITA – APS Soluções Imobiliárias\n\n`;
+  t+=`Cliente: ${v('nome')}\n`;
+  if(v('cpf'))t+=`CPF: ${v('cpf')}\n`;
+  if(v('endereco'))t+=`Endereço: ${v('endereco')}\n`;
+  if(v('email'))t+=`E-mail: ${v('email')}\n`;
+  t+=`Cel: ${v('tel')}`;if(v('telres'))t+=` | Resid.: ${v('telres')}`;if(v('telcom'))t+=` | Com.: ${v('telcom')}`;t+=`\n`;
+  t+=`VALOR PRETENDIDO: ${v('pretendido')}\nCorretor(a): ${v('corretor')}\n\nIMÓVEIS:\n`+ims.map((x,i)=>`${i+1}. ${x}`).join('\n')+`\n\n`;
+  t+=`Declaro que nesta data, por intermédio do(s) corretor(a) acima, visitei pela primeira vez e obtive as informações e a consultoria necessárias para aquisição do(s) imóvel(eis) relacionado(s). Comprometo-me a não efetivar a aquisição através de outro intermediário ou diretamente com o proprietário. Caso o negócio seja realizado por pessoa não ligada à APS Soluções Imobiliárias (CNPJ 43.728.620/0001-54), pagarei pelos serviços prestados 6% (seis por cento) do valor pretendido; se o negócio for viabilizado pela APS, nada será devido pelo cliente.\n\n`;
+  t+=`Belo Horizonte, ${porExtenso(v('data'))}.\nAssinado eletronicamente por: ${v('assinatura')} (em ${agora})\n`;
+  if(querProposta){
+    t+=`\nPROPOSTA\n`;
+    t+=`Imóvel: ${ims.length>1?$('qual').value:ims[0]}\nValor ofertado: ${v('valor')}\nPagamento: ${pag.join(' + ')}\n`;
+    if(v('entrada'))t+=`Entrada/sinal: ${v('entrada')}\n`;
+    t+=`Validade: ${$('validade').value}\n`;
+    if(v('obs'))t+=`Condições: ${v('obs')}\n`;
+    t+=`(Sujeita à aceitação do proprietário; só se torna definitiva com a assinatura do instrumento próprio.)\n`;
+  }
+  $('review').textContent=t;
+  $('wa').href=`https://wa.me/${WA}?text=${encodeURIComponent(t)}`;
+  $('ok-msg').textContent=(querProposta?'Termo e proposta prontos.':'Termo pronto.')+' Toque em "Enviar pelo WhatsApp" para mandar à APS.';
+  $('saida').hidden=false;$('saida').scrollIntoView({behavior:'smooth',block:'start'});
+});
+$('copiar').addEventListener('click',()=>{
+  const txt=$('review').textContent;const b=$('copiar');
+  const done=()=>{b.textContent='Copiado';setTimeout(()=>b.textContent='Copiar texto',2000);};
+  const sel=()=>{const r=document.createRange();r.selectNodeContents($('review'));const s=getSelection();s.removeAllRanges();s.addRange(r);b.textContent='Texto selecionado';};
+  try{navigator.clipboard.writeText(txt).then(done,sel);}catch(e){sel();}
+});
+})();
+</script>
+</body></html>
