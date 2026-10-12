@@ -124,7 +124,18 @@ footer{color:var(--muted);font-size:12.5px;text-align:center}
         <div class="grid">
           <label class="f full" id="wrap-qual" hidden><span class="req">Imóvel da proposta</span><select id="qual"></select></label>
           <label class="f"><span class="req">Valor ofertado (R$)</span><input id="valor" inputmode="numeric" placeholder="R$ 0,00"></label>
-          <label class="f"><span>Entrada / sinal (R$)</span><input id="entrada" inputmode="numeric" placeholder="R$ 0,00"></label>
+          <label class="f"><span>Entrada (% do valor ofertado)</span>
+            <select id="entrada-pct">
+              <option value="">Selecione</option>
+              <option value="20">20% (mínimo p/ financiamento)</option>
+              <option value="25">25%</option>
+              <option value="30">30%</option>
+              <option value="40">40%</option>
+              <option value="50">50%</option>
+              <option value="outro">Outro valor</option>
+            </select></label>
+          <label class="f"><span>Entrada / sinal (R$)</span><input id="entrada" inputmode="numeric" placeholder="R$ 0,00" readonly>
+            <small id="entrada-aviso" style="color:#6b6480"></small></label>
           <div class="full">
             <div class="f" style="margin-bottom:6px"><span class="req">Forma de pagamento</span></div>
             <div class="chips">
@@ -214,6 +225,24 @@ $('cpf').addEventListener('input',e=>{e.target.value=maskCPF(e.target.value);$('
 $('cpf').addEventListener('blur',e=>{if(e.target.value&&!cpfOK(e.target.value))$('cpf-err').textContent='CPF inválido. Confira os números.';});
 ['tel','telres','telcom'].forEach(id=>$(id).addEventListener('input',e=>e.target.value=maskTel(e.target.value)));
 ['valor','entrada','pretendido'].forEach(id=>$(id).addEventListener('input',e=>e.target.value=maskBRL(e.target.value)));
+function brlNum(s){const n=(s||'').replace(/\D/g,'');return n?parseInt(n,10)/100:0;}
+function fmtBRL(x){return 'R$ '+x.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2});}
+function financia(){return !!document.querySelector('input[name=pag][value="Financiamento bancário"]:checked');}
+function syncEntrada(){
+  const pct=$('entrada-pct').value,val=brlNum($('valor').value),ent=$('entrada'),av=$('entrada-aviso');
+  if(pct==='outro'){ent.readOnly=false;}
+  else{ent.readOnly=true;ent.value=(pct&&val)?fmtBRL(Math.round(val*(+pct))/100):'';}
+  const e=brlNum(ent.value);
+  if(financia()&&val)av.textContent=`Financiamento bancário: entrada mínima de 20% (${fmtBRL(val*0.2)}).`;
+  else av.textContent=(e&&val)?`Equivale a ${(e/val*100).toFixed(1).replace('.',',')}% do valor ofertado.`:'';
+}
+$('entrada-pct').addEventListener('change',syncEntrada);
+$('valor').addEventListener('input',syncEntrada);
+$('entrada').addEventListener('input',syncEntrada);
+document.querySelectorAll('input[name=pag]').forEach(x=>x.addEventListener('change',()=>{
+  if(financia()&&!$('entrada-pct').value){$('entrada-pct').value='20';}
+  syncEntrada();
+}));
 $('corretor').addEventListener('input',e=>$('t-corretor').textContent=e.target.value.trim()||'indicado(s) acima');
 $('pretendido').addEventListener('input',e=>$('t-valor').textContent=e.target.value||'informado acima');
 
@@ -252,6 +281,10 @@ $('form').addEventListener('submit',async e=>{
     if(!v('valor'))errs.push('informe o valor da proposta');
     pag=[...document.querySelectorAll('input[name=pag]:checked')].map(x=>x.value);
     if(!pag.length)errs.push('escolha a forma de pagamento');
+    if(pag.includes('Financiamento bancário')&&v('valor')){
+      const vo=brlNum(v('valor')),en=brlNum(v('entrada'));
+      if(!en||en+0.005<vo*0.2)errs.push(`no financiamento bancário a entrada mínima é de 20% (${fmtBRL(vo*0.2)})`);
+    }
   }
   if(errs.length){$('form-err').textContent='Falta pouco: '+errs.join('; ')+'.';$('saida').hidden=true;return;}
   $('form-err').textContent='';
@@ -268,7 +301,7 @@ $('form').addEventListener('submit',async e=>{
   if(querProposta){
     t+=`\nPROPOSTA\n`;
     t+=`Imóvel: ${ims.length>1?$('qual').value:ims[0]}\nValor ofertado: ${v('valor')}\nPagamento: ${pag.join(' + ')}\n`;
-    if(v('entrada'))t+=`Entrada/sinal: ${v('entrada')}\n`;
+    if(v('entrada')){const vo=brlNum(v('valor')),en=brlNum(v('entrada'));t+=`Entrada/sinal: ${v('entrada')}${vo?` (${(en/vo*100).toFixed(1).replace('.',',').replace(',0','')}% do valor ofertado)`:''}\n`;}
     t+=`Validade: ${$('validade').value}\n`;
     if(v('obs'))t+=`Condições: ${v('obs')}\n`;
     t+=`(Sujeita à aceitação do proprietário; só se torna definitiva com a assinatura do instrumento próprio.)\n`;
