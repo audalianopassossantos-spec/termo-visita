@@ -1,5 +1,12 @@
 {
   "rewrites": [
-    { "source": "/verificar/:codigo", "destination": "/verificar.html" }
+    {
+      "source": "/verificar/:codigo",
+      "destination": "/verificar.html"
+    },
+    {
+      "source": "/autorizacao",
+      "destination": "/autorizacao.html"
+    }
   ]
 }

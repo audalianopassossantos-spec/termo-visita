@@ -1,0 +1,332 @@
+<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="robots" content="noindex,nofollow">
+<style>[hidden]{display:none!important}img{max-width:100%}body{margin:0}</style>
+<title>Autorização de Venda APS</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<style>
+/* Layout: coluna única, cabeçalho de marca, cinco seções numeradas (sequência real de preenchimento), ficha final em "papel" com QR code */
+:root{
+  --bg:#f5f3f8; --surface:#ffffff; --fg:#1f1830; --muted:#6b6580; --line:#ddd8e8;
+  --brand:#2b1d4f; --brand-fg:#ffffff; --accent:#6a4fd0; --accent-soft:#ece7fb;
+  --ok:#1f7a4d; --err:#b3261e; --paper:#ffffff; --paper-fg:#1a1a1a; --paper-line:#222;
+  --font:"Plus Jakarta Sans",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#150f26; --surface:#211838; --fg:#efeaf9; --muted:#a79fc0; --line:#3a2f5a;
+  --brand:#3a2a68; --brand-fg:#ffffff; --accent:#a592f0; --accent-soft:#2f2552;
+  --ok:#5fd09a; --err:#ff8a80; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#150f26; --surface:#211838; --fg:#efeaf9; --muted:#a79fc0; --line:#3a2f5a;
+  --brand:#3a2a68; --brand-fg:#ffffff; --accent:#a592f0; --accent-soft:#2f2552;
+  --ok:#5fd09a; --err:#ff8a80; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font-family:var(--font);font-size:15px;line-height:1.5;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:0 40px}
+.wrap{max-width:640px;margin:0 auto}
+header{display:flex;align-items:center;gap:14px;padding:22px 0 18px}
+.logo{width:52px;height:52px;border-radius:12px;background:var(--brand);display:grid;place-items:center;flex:none}
+.logo svg{width:30px;height:30px}
+.brand b{display:block;font-size:19px;font-weight:800;letter-spacing:-.01em}
+.brand span{color:var(--muted);font-size:13px}
+h1{font-size:26px;line-height:1.15;letter-spacing:-.02em;margin:6px 0 4px;text-wrap:balance}
+.lead{color:var(--muted);margin:0 0 20px}
+section.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:18px 16px;margin-bottom:14px}
+section.card h2{font-size:15px;margin:0 0 14px;display:flex;align-items:center;gap:10px;font-weight:700}
+.n{width:24px;height:24px;border-radius:50%;background:var(--accent-soft);color:var(--accent);display:grid;place-items:center;font-size:12px;font-weight:800;flex:none}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.full{grid-column:1/-1}
+.f{min-width:0}
+label{display:block;font-size:12px;font-weight:600;color:var(--muted);margin-bottom:4px;letter-spacing:.02em}
+input,select,textarea{width:100%;font:inherit;color:var(--fg);background:var(--bg);border:1px solid var(--line);border-radius:9px;padding:10px 11px;min-height:44px}
+textarea{min-height:76px;resize:vertical}
+input:focus-visible,select:focus-visible,textarea:focus-visible,button:focus-visible,.chip:focus-within{outline:2px solid var(--accent);outline-offset:1px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{position:relative}
+.chip input{position:absolute;opacity:0;inset:0;min-height:0;cursor:pointer}
+.chip span{display:block;padding:9px 14px;border:1px solid var(--line);border-radius:999px;background:var(--bg);font-weight:600;font-size:14px}
+.chip input:checked+span{background:var(--brand);color:var(--brand-fg);border-color:var(--brand)}
+.chip input:focus-visible+span{outline:2px solid var(--accent);outline-offset:1px}
+.hint{font-size:12px;color:var(--muted);margin-top:6px}
+.toggle{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.toggle input{width:20px;height:20px;min-height:0}
+.toggle label{margin:0;font-size:14px;color:var(--fg)}
+.terms{font-size:13.5px;color:var(--fg);background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:12px 14px}
+.terms p{margin:0 0 8px}.terms p:last-child{margin:0}
+.btn{font:inherit;font-weight:700;border:0;border-radius:11px;padding:13px 16px;min-height:48px;cursor:pointer;width:100%}
+.primary{background:var(--brand);color:var(--brand-fg)}
+.ghost{background:var(--accent-soft);color:var(--accent);border:1px solid var(--line)}
+.row{display:flex;flex-direction:column;gap:10px;margin-top:6px}
+.err{color:var(--err);font-size:13px;font-weight:600;margin-top:10px}
+.bad{border-color:var(--err)!important}
+footer{color:var(--muted);font-size:12px;text-align:center;margin-top:18px}
+/* ficha */
+#result{margin-top:22px}
+.okbar{display:flex;gap:10px;align-items:center;color:var(--ok);font-weight:700;margin-bottom:12px}
+.paper{background:var(--paper);color:var(--paper-fg);border-radius:6px;padding:18px 16px;border:1px solid var(--line);overflow-x:auto}
+.paper .inner{min-width:520px}
+.paper .top{display:flex;justify-content:space-between;align-items:center;gap:12px;border-bottom:2px solid var(--paper-line);padding-bottom:10px}
+.paper .top .l{display:flex;gap:10px;align-items:center}
+.paper .top .logo{width:40px;height:40px;background:#2b1d4f}
+.paper h3{text-align:center;font-size:17px;margin:12px 0 10px;letter-spacing:.01em}
+table{width:100%;border-collapse:collapse;font-size:12px;margin-bottom:10px}
+td,th{border:1px solid var(--paper-line);padding:4px 6px;text-align:left;vertical-align:top}
+td small{display:block;font-size:10px;font-weight:700;color:#333}
+td span{display:block;min-height:15px;text-transform:uppercase}
+.side{background:#e6e6e6;width:22px;text-align:center;font-size:10px;font-weight:700;padding:0}
+.side div{writing-mode:vertical-rl;transform:rotate(180deg);margin:auto}
+.legal{font-size:11.5px;text-align:justify}.legal p{margin:0 0 7px}
+.sigs{display:flex;gap:18px;margin-top:14px}
+.sig{flex:1;text-align:center;font-size:11px}
+.sig .line{border-bottom:1px solid #222;min-height:34px;font-family:"Brush Script MT","Segoe Script",cursive;font-size:20px;display:flex;align-items:flex-end;justify-content:center;padding-bottom:2px}
+.qrrow{display:flex;gap:14px;align-items:center;margin-top:14px;border-top:1px dashed #999;padding-top:12px}
+#qr{background:#fff;padding:6px;border-radius:4px;flex:none;line-height:0}
+.qrrow p{font-size:11px;margin:0;color:#333}
+.qrrow b{font-size:12px}
+@media (max-width:480px){.grid{grid-template-columns:1fr}}
+@media (prefers-reduced-motion:no-preference){.btn{transition:transform .1s}.btn:active{transform:scale(.98)}}
+</style>
+
+</head><body>
+<div class="wrap">
+  <header>
+    <div class="logo"><svg viewBox="0 0 32 32" fill="none"><circle cx="9" cy="16" r="5" stroke="#fff" stroke-width="3"/><path d="M14 16h15M23 16v5M28 16v4" stroke="#fff" stroke-width="3" stroke-linecap="round"/></svg></div>
+    <div class="brand"><b>APS Soluções Imobiliárias</b><span>CRECI PJ 8674 · CNPJ 43.728.620/0001-54</span></div>
+  </header>
+
+  <h1>Autorização de Venda</h1>
+  <p class="lead">Preencha os dados do proprietário e do imóvel. Ao final, a ficha é gerada com QR code e pronta para enviar.</p>
+
+  <form id="form" novalidate>
+    <section class="card">
+      <h2><span class="n">1</span>Proprietário(a)</h2>
+      <div class="grid">
+        <div class="f full"><label for="p_nome">Nome / Razão social</label><input id="p_nome" autocomplete="off"></div>
+        <div class="f"><label for="p_cpf">CPF / CNPJ</label><input id="p_cpf" inputmode="numeric" placeholder="000.000.000-00"></div>
+        <div class="f"><label for="p_rg">I.E. / Identidade</label><input id="p_rg"></div>
+        <div class="f"><label for="p_prof">Profissão / Ramo</label><input id="p_prof"></div>
+        <div class="f"><label for="p_civil">Estado civil</label>
+          <select id="p_civil"><option>Casado(a)</option><option>Solteiro(a)</option><option>Divorciado(a)</option><option>Viúvo(a)</option><option>União estável</option></select></div>
+        <div class="f full"><label for="p_end">Endereço</label><input id="p_end"></div>
+        <div class="f"><label for="p_bairro">Bairro</label><input id="p_bairro"></div>
+        <div class="f"><label for="p_cel">Celular</label><input id="p_cel" inputmode="tel" placeholder="(31) 90000-0000"></div>
+        <div class="f"><label for="p_res">Tel. residencial</label><input id="p_res" inputmode="tel"></div>
+        <div class="f"><label for="p_com">Tel. comercial</label><input id="p_com" inputmode="tel"></div>
+        <div class="f"><label for="p_mail1">E-mail 1</label><input id="p_mail1" type="email" inputmode="email"></div>
+        <div class="f"><label for="p_mail2">E-mail 2</label><input id="p_mail2" type="email" inputmode="email"></div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2><span class="n">2</span>Cônjuge / Sócio(a)</h2>
+      <div class="toggle"><input type="checkbox" id="c_on" checked><label for="c_on">Há cônjuge ou sócio(a) a assinar</label></div>
+      <div class="grid" id="c_box">
+        <div class="f full"><label for="c_nome">Nome</label><input id="c_nome" autocomplete="off"></div>
+        <div class="f"><label for="c_cpf">CPF / CNPJ</label><input id="c_cpf" inputmode="numeric" placeholder="000.000.000-00"></div>
+        <div class="f"><label for="c_rg">I.E. / Identidade</label><input id="c_rg"></div>
+        <div class="f"><label for="c_prof">Profissão / Ramo</label><input id="c_prof"></div>
+        <div class="f"><label for="c_civil">Estado civil</label>
+          <select id="c_civil"><option>Casado(a)</option><option>Solteiro(a)</option><option>Divorciado(a)</option><option>Viúvo(a)</option><option>União estável</option></select></div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2><span class="n">3</span>Imóvel</h2>
+      <div class="grid">
+        <div class="f full"><label for="i_log">Logradouro</label><input id="i_log"></div>
+        <div class="f"><label for="i_num">Nº</label><input id="i_num"></div>
+        <div class="f"><label for="i_comp">Complemento</label><input id="i_comp" placeholder="Apto 502"></div>
+        <div class="f"><label for="i_bairro">Bairro</label><input id="i_bairro"></div>
+        <div class="f"><label for="i_cidade">Cidade</label><input id="i_cidade" value="Belo Horizonte"></div>
+        <div class="f"><label for="i_mat">Matrícula</label><input id="i_mat" inputmode="numeric"></div>
+        <div class="f"><label for="i_cart">Cartório</label><input id="i_cart" placeholder="1º Ofício BH"></div>
+        <div class="f"><label for="i_tipo">Tipo</label>
+          <select id="i_tipo"><option>Apto</option><option>Casa</option><option>Cobertura</option><option>Sala comercial</option><option>Loja</option><option>Lote / Terreno</option><option>Galpão</option><option>Outro</option></select></div>
+        <div class="f"><label>Onerado?</label>
+          <div class="chips">
+            <label class="chip"><input type="radio" name="oner" value="Não" checked><span>Não</span></label>
+            <label class="chip"><input type="radio" name="oner" value="Sim"><span>Sim</span></label>
+          </div></div>
+      </div>
+      <p class="hint">Anexar cópia do Registro e do IPTU.</p>
+    </section>
+
+    <section class="card">
+      <h2><span class="n">4</span>Condições da venda</h2>
+      <div class="grid">
+        <div class="f"><label for="v_preco">Preço (R$)</label><input id="v_preco" inputmode="numeric" placeholder="620.000,00"></div>
+        <div class="f"><label for="v_hon">Honorários (%)</label><input id="v_hon" inputmode="decimal" value="6"></div>
+        <div class="f full"><label for="v_cond">Condições de pagamento</label><input id="v_cond" value="A combinar"></div>
+        <div class="f full"><label>Exclusividade</label>
+          <div class="chips">
+            <label class="chip"><input type="radio" name="excl" value="com" checked><span>Com exclusividade</span></label>
+            <label class="chip"><input type="radio" name="excl" value="sem"><span>Sem exclusividade</span></label>
+          </div></div>
+        <div class="f full" id="prazo_box"><label for="v_prazo">Prazo da exclusividade</label>
+          <select id="v_prazo"><option value="90">90 dias</option><option value="120">120 dias</option><option value="180" selected>180 dias</option><option value="360">12 meses</option></select></div>
+        <div class="f full"><label for="v_obs">Observações</label><textarea id="v_obs"></textarea></div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2><span class="n">5</span>Termos e assinatura</h2>
+      <div class="terms" id="terms"></div>
+      <div class="toggle" style="margin-top:14px"><input type="checkbox" id="aceite"><label for="aceite">Li e concordo com a autorização de venda acima</label></div>
+      <div class="grid">
+        <div class="f full"><label for="s_prop">Assinatura do(a) proprietário(a): digite o nome completo</label><input id="s_prop" autocomplete="off"></div>
+        <div class="f full" id="s_conj_box"><label for="s_conj">Assinatura do cônjuge / sócio(a): digite o nome completo</label><input id="s_conj" autocomplete="off"></div>
+      </div>
+      <div class="err" id="err" role="alert" hidden></div>
+      <div class="row"><button class="btn primary" type="submit">Gerar ficha com QR code</button></div>
+    </section>
+  </form>
+
+  <div id="result" hidden></div>
+  <footer>Rua Kepler, 608, Loja 1, Santa Lúcia, Belo Horizonte/MG · www.apsimoveis.com.br</footer>
+</div>
+
+<script>
+(function(){
+  var $=function(id){return document.getElementById(id)};
+  var WA="5531999353400";
+  var meses=["janeiro","fevereiro","março","abril","maio","junho","julho","agosto","setembro","outubro","novembro","dezembro"];
+
+  // máscaras
+  function digits(s){return s.replace(/\D/g,"")}
+  function maskDoc(v){var d=digits(v).slice(0,14);
+    if(d.length<=11) return d.replace(/(\d{3})(\d)/,"$1.$2").replace(/(\d{3})(\d)/,"$1.$2").replace(/(\d{3})(\d{1,2})$/,"$1-$2");
+    return d.replace(/(\d{2})(\d)/,"$1.$2").replace(/(\d{3})(\d)/,"$1.$2").replace(/(\d{3})(\d)/,"$1/$2").replace(/(\d{4})(\d{1,2})$/,"$1-$2");}
+  function maskTel(v){var d=digits(v).slice(0,11);
+    if(d.length>10) return d.replace(/(\d{2})(\d{5})(\d{4})/,"($1) $2-$3");
+    if(d.length>6) return d.replace(/(\d{2})(\d{4})(\d{0,4})/,"($1) $2-$3");
+    if(d.length>2) return d.replace(/(\d{2})(\d+)/,"($1) $2");
+    return d;}
+  function maskMoney(v){var d=digits(v); if(!d) return ""; d=d.replace(/^0+/,"")||"0"; while(d.length<3) d="0"+d;
+    var c=d.slice(-2), i=d.slice(0,-2).replace(/\B(?=(\d{3})+(?!\d))/g,"."); return i+","+c;}
+  [["p_cpf",maskDoc],["c_cpf",maskDoc],["p_cel",maskTel],["p_res",maskTel],["p_com",maskTel],["v_preco",maskMoney]].forEach(function(p){
+    $(p[0]).addEventListener("input",function(e){e.target.value=p[1](e.target.value)});});
+
+  // alternâncias
+  function syncConj(){var on=$("c_on").checked;$("c_box").hidden=!on;$("s_conj_box").hidden=!on;}
+  $("c_on").addEventListener("change",syncConj);
+  function excl(){return document.querySelector('input[name="excl"]:checked').value}
+  function syncExcl(){$("prazo_box").hidden=excl()!=="com";renderTerms();}
+  document.querySelectorAll('input[name="excl"]').forEach(function(r){r.addEventListener("change",syncExcl)});
+  $("v_hon").addEventListener("input",renderTerms);
+  $("v_prazo").addEventListener("change",renderTerms);
+
+  function hon(){var h=($("v_hon").value||"6").replace(",",".");var n=parseFloat(h);return isNaN(n)?"6":String(n).replace(".",",");}
+  function extenso(n){var m={"1":"um","2":"dois","3":"três","4":"quatro","5":"cinco","6":"seis","7":"sete","8":"oito","9":"nove","10":"dez","12":"doze","15":"quinze","20":"vinte"};return m[n]||null;}
+  function honTxt(){var h=hon();var e=extenso(h);return h+"%"+(e?" ("+e+" por cento)":"");}
+  function exclTxt(){return excl()==="com"?"com exclusividade, pelo prazo de "+$("v_prazo").selectedOptions[0].text:"sem exclusividade";}
+
+  function termsHTML(){
+    return '<p>Autorizo(amos) a <b>APS SOLUÇÕES IMOBILIÁRIAS</b>, CNPJ Nº 43.728.620/0001-54, CRECI PJ 8674, estabelecida na Rua Kepler, nº 608, loja 01, Bairro Santa Lúcia, Belo Horizonte/MG, a proceder <b>'+exclTxt()+'</b> a venda do imóvel de minha (nossa) propriedade, acima discriminado.</p>'
+    +'<p>Declaro(amos) estar(mos) ciente(s) que no caso de venda do referido imóvel por meio da intermediação da <b>APS SOLUÇÕES IMOBILIÁRIAS</b>, pagarei(emos) honorários de <b>'+honTxt()+'</b> calculados sobre o valor efetivo da transação, que deverão ser pagos no ato da assinatura do instrumento particular que viabilizar o ato transacional, ou conforme combinado à época do fechamento do negócio.</p>'
+    +'<p>A remuneração acima pactuada será igual e integralmente devida se o negócio se concretizar com qualquer pessoa, natural ou jurídica, que tenha sido apresentada pela <b>APS SOLUÇÕES IMOBILIÁRIAS</b>, conforme artigo 727 do Código Civil Brasileiro.</p>'
+    +'<p>Declaro(amos) ainda que o(s) imóvel(is) ora colocado(s) em negociação encontra(m)-se livre(s) e desembaraçado(s) de ônus e gravames de quaisquer natureza e em perfeitas condições de uso e habitabilidade, e que não existe nenhuma pendência em seu(s) respectivo(s) nome(s) que lhe(s) impeça(m) de vendê-lo a quem quer que seja.</p>'
+    +'<p>Fica autorizada a irrestrita divulgação de fotos e dados do(s) imóvel(is) objeto da presente autorização no site <b>www.apsimoveis.com.br</b>, ou em qualquer outro meio lícito de comunicação.</p>';
+  }
+  function renderTerms(){$("terms").innerHTML=termsHTML();}
+
+  function esc(s){return String(s==null?"":s).replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
+  function v(id){return $(id).value.trim()}
+  function pad(n){return (n<10?"0":"")+n}
+
+  function fail(msg,ids){var e=$("err");e.textContent=msg;e.hidden=false;
+    document.querySelectorAll(".bad").forEach(function(x){x.classList.remove("bad")});
+    (ids||[]).forEach(function(i){$(i).classList.add("bad")});
+    var f=ids&&ids[0]?$(ids[0]):e; f.scrollIntoView({behavior:"smooth",block:"center"}); if(f.focus&&ids&&ids[0]) f.focus({preventScroll:true});}
+
+  $("form").addEventListener("submit",function(ev){
+    ev.preventDefault();
+    var miss=[];
+    [["p_nome","nome do proprietário"],["p_cpf","CPF/CNPJ"],["i_log","logradouro do imóvel"],["v_preco","preço"]].forEach(function(r){ if(!v(r[0])) miss.push(r); });
+    if(miss.length) return fail("Preencha: "+miss.map(function(m){return m[1]}).join(", ")+".",miss.map(function(m){return m[0]}));
+    if(!$("aceite").checked) return fail("Marque que leu e concorda com a autorização.",["aceite"]);
+    if(!v("s_prop")) return fail("O proprietário precisa digitar o nome completo como assinatura.",["s_prop"]);
+    if($("c_on").checked && !v("s_conj")) return fail("O cônjuge/sócio(a) precisa digitar o nome completo como assinatura.",["s_conj"]);
+    $("err").hidden=true; document.querySelectorAll(".bad").forEach(function(x){x.classList.remove("bad")});
+    build();
+  });
+
+  function build(){
+    var now=new Date();
+    var data=pad(now.getDate())+"/"+pad(now.getMonth()+1)+"/"+now.getFullYear();
+    var hora=pad(now.getHours())+":"+pad(now.getMinutes());
+    var dataExt=now.getDate()+" de "+meses[now.getMonth()]+" de "+now.getFullYear();
+    var rnd=Math.random().toString(36).slice(2,6).toUpperCase();
+    var proto="AV-"+now.getFullYear()+pad(now.getMonth()+1)+pad(now.getDate())+"-"+rnd;
+    var conj=$("c_on").checked;
+    var end=[v("i_log"),v("i_num")].filter(Boolean).join(", ")+(v("i_comp")?" - "+v("i_comp"):"");
+
+    var qrText=["APS SOLUÇÕES IMOBILIÁRIAS - AUTORIZAÇÃO DE VENDA",
+      "Protocolo: "+proto,
+      "Imóvel: "+$("i_tipo").value+" - "+end+(v("i_bairro")?", "+v("i_bairro"):"")+", "+v("i_cidade"),
+      v("i_mat")?"Matrícula: "+v("i_mat")+(v("i_cart")?" ("+v("i_cart")+")":""):"",
+      "Preço: R$ "+v("v_preco"),
+      "Honorários: "+honTxt(),
+      "Exclusividade: "+exclTxt(),
+      "Proprietário: "+v("p_nome")+" (CPF/CNPJ "+v("p_cpf")+")",
+      "Assinado digitalmente por "+v("s_prop")+(conj?" e "+v("s_conj"):"")+" em "+data+" "+hora
+    ].filter(Boolean).join("\n");
+
+    var zap=["*AUTORIZAÇÃO DE VENDA - APS Soluções Imobiliárias*","Protocolo: "+proto,"",
+      "*Proprietário:* "+v("p_nome")+" - "+v("p_cpf"),
+      conj?"*Cônjuge/Sócio(a):* "+v("c_nome")+" - "+v("c_cpf"):"",
+      "*Imóvel:* "+$("i_tipo").value+" - "+end+(v("i_bairro")?", "+v("i_bairro"):"")+" - "+v("i_cidade"),
+      v("i_mat")?"*Matrícula:* "+v("i_mat")+(v("i_cart")?" - "+v("i_cart"):""):"",
+      "*Onerado:* "+document.querySelector('input[name="oner"]:checked').value,
+      "*Preço:* R$ "+v("v_preco"),"*Condições:* "+v("v_cond"),
+      "*Honorários:* "+honTxt(),"*Exclusividade:* "+exclTxt(),
+      v("v_obs")?"*Obs.:* "+v("v_obs"):"","",
+      "Assinado por "+v("s_prop")+(conj?" e "+v("s_conj"):"")+" em "+data+" às "+hora+"."
+    ].filter(function(x,i,a){return x!==""||a[i-1]!==""}).join("\n");
+
+    function cell(label,val,span){return '<td'+(span?' colspan="'+span+'"':'')+'><small>'+label+'</small><span>'+esc(val)+'</span></td>';}
+    var propRows='<tr><td class="side" rowspan="6"><div>Proprietário(a)</div></td>'+cell("Nome/Razão Social:",v("p_nome"),4)+'</tr>'
+      +'<tr>'+cell("CPF/CNPJ:",v("p_cpf"))+cell("I.E / Identidade:",v("p_rg"))+cell("Profissão / Ramo:",v("p_prof"))+cell("Est. Civil:",$("p_civil").value)+'</tr>'
+      +(conj?'<tr>'+cell("Cônjuge/Sócio(s):",v("c_nome")+(v("c_cpf")?" - "+v("c_cpf"):""),4)+'</tr>':'<tr>'+cell("Cônjuge/Sócio(s):","-",4)+'</tr>')
+      +'<tr>'+cell("End.:",v("p_end"),2)+cell("Bairro:",v("p_bairro"),2)+'</tr>'
+      +'<tr>'+cell("Tel(s): Res.",v("p_res"))+cell("Comercial:",v("p_com"))+cell("Celular:",v("p_cel"),2)+'</tr>'
+      +'<tr>'+cell("E-mail 1:",v("p_mail1"),2)+cell("E-mail 2:",v("p_mail2"),2)+'</tr>';
+    var imRows='<tr><td class="side" rowspan="4"><div>Imóvel</div></td>'+cell("Logradouro:",v("i_log"),2)+cell("Nº:",v("i_num"))+cell("Complemento:",v("i_comp"))+'</tr>'
+      +'<tr>'+cell("Bairro:",v("i_bairro"),2)+cell("Cidade:",v("i_cidade"))+cell("Matrícula:",v("i_mat"))+'</tr>'
+      +'<tr>'+cell("Cartório:",v("i_cart"),2)+cell("Onerado?",document.querySelector('input[name="oner"]:checked').value,2)+'</tr>'
+      +'<tr>'+cell("Tipo",$("i_tipo").value)+cell("Preço","R$ "+v("v_preco"))+cell("Condições de Pagamento",v("v_cond"),2)+'</tr>';
+
+    var sigs='<div class="sigs"><div class="sig"><div class="line">'+esc(v("s_prop"))+'</div>Proprietário(a)</div>'
+      +(conj?'<div class="sig"><div class="line">'+esc(v("s_conj"))+'</div>Cônjuge/Sócio(a)</div>':'')+'</div>';
+
+    var html='<div class="okbar">&#10003; Ficha gerada · '+esc(proto)+'</div>'
+      +'<div class="paper"><div class="inner">'
+      +'<div class="top"><div class="l"><div class="logo"><svg viewBox="0 0 32 32" fill="none" style="width:24px;height:24px"><circle cx="9" cy="16" r="5" stroke="#fff" stroke-width="3"/><path d="M14 16h15M23 16v5M28 16v4" stroke="#fff" stroke-width="3" stroke-linecap="round"/></svg></div><div><b style="font-size:15px">APS</b><br><span style="font-size:11px">Soluções Imobiliárias</span></div></div><div style="font-size:11px;text-align:right">Protocolo<br><b>'+esc(proto)+'</b></div></div>'
+      +'<h3>AUTORIZAÇÃO DE VENDA</h3>'
+      +'<table>'+propRows+'</table><table>'+imRows+'</table>'
+      +'<div class="legal">'+termsHTML()+(v("v_obs")?'<p><b>Obs.:</b> '+esc(v("v_obs"))+'</p>':'<p><b>Obs.:</b></p>')+'</div>'
+      +'<p style="text-align:center;font-size:12px;margin:10px 0 0">Belo Horizonte, '+dataExt+'.</p>'
+      +sigs
+      +'<div class="qrrow"><div id="qr"></div><p><b>Assinada digitalmente em '+data+' às '+hora+'</b><br>Aponte a câmera do celular para o QR code para ver os dados desta autorização.<br>* Anexar cópia do Registro e IPTU.</p></div>'
+      +'</div></div>'
+      +'<div class="row">'
+      +'<a class="btn primary" id="wa" style="text-align:center;text-decoration:none;display:block" target="_blank" rel="noopener">Enviar resumo pelo WhatsApp</a>'
+      +'<button class="btn ghost" type="button" id="copy">Copiar texto da ficha</button>'
+      +'<button class="btn ghost" type="button" id="back">Editar dados</button></div>'
+      +'<div class="hint" id="cmsg" aria-live="polite"></div>';
+
+    var r=$("result"); r.innerHTML=html; r.hidden=false;
+    new QRCode($("qr"),{text:qrText,width:116,height:116,colorDark:"#000000",colorLight:"#ffffff",correctLevel:QRCode.CorrectLevel.L});
+    $("wa").href="https://wa.me/"+WA+"?text="+encodeURIComponent(zap);
+    $("copy").addEventListener("click",function(){
+      var ok=function(){$("cmsg").textContent="Texto copiado."};
+      var fb=function(){var t=document.createElement("textarea");t.value=zap;document.body.appendChild(t);t.select();try{document.execCommand("copy");ok()}catch(e){$("cmsg").textContent="Não foi possível copiar. Use o botão do WhatsApp."}document.body.removeChild(t)};
+      if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(zap).then(ok,fb)}else fb();
+    });
+    $("back").addEventListener("click",function(){r.hidden=true;window.scrollTo({top:0,behavior:"smooth"})});
+    r.scrollIntoView({behavior:"smooth",block:"start"});
+  }
+
+  syncConj(); syncExcl();
+})();
+</script>
+
+</body></html>
